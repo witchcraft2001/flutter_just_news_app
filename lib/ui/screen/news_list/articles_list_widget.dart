@@ -1,8 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:just_news/model/article.dart';
+import 'package:just_news/repository/article_repository.dart';
 import 'package:just_news/ui/screen/article_details/article_details.dart';
 
 class ArticlesListWidget extends StatefulWidget {
@@ -15,13 +14,16 @@ class ArticlesListWidget extends StatefulWidget {
 class ArticlesListWidgetState extends State {
 
   var articlesList = List<Article>();
+  var repository = ArticleRepository();
 
   @override
   void initState() {
-    parseArticleList().then((value) {
+    repository.fetchArticles().then((value) {
       setState(() {
         articlesList = value;
       });
+    }).catchError((error) {
+      print(error);
     });
     super.initState();
   }
@@ -59,14 +61,6 @@ class ArticlesListWidgetState extends State {
       ),
     );
   }
-
-  Future<List<Article>> parseArticleList() async {
-    String data = await DefaultAssetBundle.of(context)
-        .loadString("res/assets/articles.json");
-    Map<String, dynamic> decodedJson = jsonDecode(data);
-    ArticlesList articlesList = ArticlesList.fromMappedJson(decodedJson);
-    return articlesList.articlesList;
-  }
 }
 
 class CustomListItem extends StatelessWidget {
@@ -90,10 +84,7 @@ class CustomListItem extends StatelessWidget {
               child: Container(
                 height: 60.0,
                 width: 60.0,
-                child: Image.network(
-                  urlToImage,
-                  fit: BoxFit.cover,
-                ),
+                child: urlToImage != null ? Image.network(urlToImage, fit: BoxFit.cover) : Container(),
               ),
             ),
           ),

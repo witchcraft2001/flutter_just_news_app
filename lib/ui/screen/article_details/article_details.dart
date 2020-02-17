@@ -23,12 +23,35 @@ class ArticleDetailsScreen extends StatelessWidget {
             pinned: true,
             expandedHeight: 200.0,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(title),
+              title: Text(
+                title,
+                maxLines: 2,
+              ),
               background: Hero(
                 tag: 'photo{$index}',
-                child: Image.network(
-                  posterUrl,
-                  fit: BoxFit.cover,
+                child: Stack(
+                  children: <Widget>[
+                    posterUrl != null ? Image.network(
+                      posterUrl,
+                      fit: BoxFit.cover,
+                    ) : Container(),
+                    Container(
+                      height: MediaQuery.of(context).size.width * 0.8,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            const Color(0xDD000000),
+                            const Color(0x00000000),
+                            const Color(0x00000000),
+                            const Color(0xDD000000),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
