@@ -12,7 +12,7 @@ class JustNewsApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ArticlesListWidget(),
+      home: ArticlesListScreenWidget(),
 //      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
