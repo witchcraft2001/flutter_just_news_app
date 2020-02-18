@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class ArticleDetailsScreen extends StatelessWidget {
+class ArticleDetailsScreenWidget extends StatelessWidget {
   final String title;
   final String posterUrl;
   final String content;
+  final String url;
   final int index;
 
-  ArticleDetailsScreen({
+  ArticleDetailsScreenWidget({
     Key key,
     this.title,
     this.posterUrl,
     this.content,
+    this.url,
     this.index,
   }) : super(key: key);
 
@@ -26,15 +29,20 @@ class ArticleDetailsScreen extends StatelessWidget {
               title: Text(
                 title,
                 maxLines: 2,
+                style: TextStyle(shadows: <Shadow>[
+                  Shadow(offset: Offset(2, 2), blurRadius: 3),
+                ], fontSize: 16.0),
               ),
               background: Hero(
                 tag: 'photo{$index}',
                 child: Stack(
                   children: <Widget>[
-                    posterUrl != null ? Image.network(
-                      posterUrl,
-                      fit: BoxFit.cover,
-                    ) : Container(),
+                    posterUrl != null
+                        ? Image.network(
+                            posterUrl,
+                            fit: BoxFit.cover,
+                          )
+                        : Container(),
                     Container(
                       height: MediaQuery.of(context).size.width * 0.8,
                       width: MediaQuery.of(context).size.width,
@@ -55,6 +63,13 @@ class ArticleDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.launch),
+                tooltip: "Open full text article",
+                onPressed: _launchUrl,
+              ),
+            ],
           ),
         ],
         body: Padding(
@@ -62,11 +77,18 @@ class ArticleDetailsScreen extends StatelessWidget {
           child: Text(
             content,
             style: TextStyle(
-              fontSize: 16.0,
+              fontSize: 20.0,
             ),
           ),
         ),
       ),
     );
+  }
+
+  _launchUrl() async {
+    //todo: show error message when can't launch url
+    if (await canLaunch(url)) {
+      await launch(url);
+    }
   }
 }

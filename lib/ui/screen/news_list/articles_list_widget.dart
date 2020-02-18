@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:just_news/model/article.dart';
 import 'package:just_news/repository/article_repository.dart';
-import 'package:just_news/ui/screen/article_details/article_details.dart';
+import 'package:just_news/ui/screen/article_details/article_details_widget.dart';
 
-class ArticlesListWidget extends StatefulWidget {
+class ArticlesListScreenWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return ArticlesListWidgetState();
+    return ArticlesListScreenWidgetState();
   }
 }
 
-class ArticlesListWidgetState extends State {
+class ArticlesListScreenWidgetState extends State {
 
   var articlesList = List<Article>();
   var repository = ArticleRepository();
@@ -43,10 +43,11 @@ class ArticlesListWidgetState extends State {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ArticleDetailsScreen(
+                    builder: (context) => ArticleDetailsScreenWidget(
                       title: articlesList[index].title,
                       posterUrl: articlesList[index].urlToImage,
                       content: articlesList[index].content,
+                      url: articlesList[index].url,
                       index: index,
                     )),
               );
