@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:just_news/model/article.dart';
+import 'package:just_news/model/country.dart';
 import 'package:just_news/repository/article_repository.dart';
 import 'package:just_news/ui/screen/article_details/article_details_widget.dart';
 
@@ -18,6 +21,8 @@ class ArticlesListScreenWidgetState extends State {
 
   @override
   void initState() {
+
+    //todo: add country list loading
     repository.fetchArticles().then((value) {
       setState(() {
         articlesList = value;
@@ -26,6 +31,14 @@ class ArticlesListScreenWidgetState extends State {
       print(error);
     });
     super.initState();
+  }
+
+  Future<List<Country>> parseCountriesList() async {
+    String data = await DefaultAssetBundle.of(context)
+        .loadString("res/assets/countries.json");
+    Map<String, dynamic> decodedJson = jsonDecode(data);
+    CountryList countriesList = CountryList.fromMappedJson(decodedJson);
+    return countriesList.countriesList;
   }
 
   @override
